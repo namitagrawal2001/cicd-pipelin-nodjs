@@ -6,7 +6,6 @@ pipeline {
         IMAGE_NAME = 'nestjs-image'
         EMAIL = "agrawalnamit2001@gmail.com"
         PORT = "3000"
-        
     }
 
     stages {
@@ -18,40 +17,33 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME '
-                
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
-        stage('stop & Remove old container') {
+
+        stage('Stop & Remove old container') {
             steps {
                 sh '''
                     docker stop $CONTAINER_NAME || true
                     docker rm $CONTAINER_NAME || true
                 '''
-                
             }
         }
-        stage('Docker container Run') {
+
+        stage('Run Docker Container') {
             steps {
-                sh '''
-                    docker run -d -p ${PORT}:${PORT} 
-                    --name $CONTAINER_NAME $IMAGE_NAME
-                '''
-                
+                sh "docker run -d -p ${PORT}:${PORT} --name $CONTAINER_NAME $IMAGE_NAME"
             }
         }
+
         stage('Send Email Notification') {
             steps {
-                emailtext(
+                emailext(
                     subject: "NodeJS Application Deployed Successfully on EC2",
-                    body: "Your NodeJS application has been successfully deploye! http://13.126.167.150:${PORT}/",
+                    body: "Your NodeJS application has been successfully deployed! http://13.126.167.150:${PORT}/",
                     to: "${EMAIL}"
                 )
-                
             }
         }
-
     }
 }
-
-    
