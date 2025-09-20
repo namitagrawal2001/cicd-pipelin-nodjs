@@ -44,7 +44,7 @@ pipeline {
             steps {
                 emailtext(
                     subject: "NodeJS Application Deployed Successfully on EC2",
-                    body: "Your NodeJS application has been successfully deploye! http://13.126.167.150:${PORT}/"
+                    body: "Your NodeJS application has been successfully deploye! http://13.126.167.150:${PORT}/",
                     to: "${EMAIL}"
                 )
                 
